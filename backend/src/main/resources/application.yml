@@ -1,0 +1,111 @@
+# ProjectFlow backend configuration.
+# Secrets and machine-specific values come from environment variables; the
+# defaults below are for local development only. See .env.example.
+
+server:
+  # Hosts such as Railway and Render tell the app which port to use through PORT.
+  port: ${SERVER_PORT:${PORT:8080}}
+  error:
+    include-message: never
+
+spring:
+  application:
+    name: projectflow
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/projectflow?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=utf8}
+    username: ${DB_USERNAME:projectflow}
+    password: ${DB_PASSWORD:projectflow}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none              # Flyway owns the schema (see db/migration)
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100   # loads lazy collections (criteria, checklists) in batches
+        jdbc:
+          time_zone: UTC
+          batch_size: 50
+        order_inserts: true
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 55MB
+  jackson:
+    default-property-inclusion: always
+    serialization:
+      write-dates-as-timestamps: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+
+projectflow:
+  # IANA time zone used to decide what "today" and "overdue" mean.
+  zone: ${PROJECTFLOW_ZONE:Asia/Kolkata}
+  jwt:
+    # Base64-encoded key of at least 32 bytes. REQUIRED outside local development:
+    #   openssl rand -base64 48
+    secret: ${JWT_SECRET:ZGV2LW9ubHktcHJvamVjdGZsb3ctc2VjcmV0LWNoYW5nZS1tZS1iZWZvcmUtZGVwbG95aW5nLTEyMzQ1Ng==}
+    expiration-seconds: ${JWT_EXPIRATION_SECONDS:86400}
+  cors:
+    # The Vite dev server proxies /api, so CORS is only needed if you call the API directly.
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5174,http://127.0.0.1:5174}
+  storage:
+    # Uploaded evidence files are stored here (outside the web root).
+    directory: ${STORAGE_DIR:./data/uploads}
+  demo-data:
+    # Seed demo users, projects and tasks when the database has no users yet.
+    enabled: ${DEMO_DATA:true}
+  site:
+    # The frontend's public address. Links in emails point here. Set it in production
+    # (e.g. https://projectflow.vercel.app, no trailing slash).
+    url: ${APP_URL:http://localhost:5174}
+    name: ${SITE_NAME:ProjectFlow}
+    # Shown at the bottom of emails (optional).
+    contact-email: ${CONTACT_EMAIL:}
+  email:
+    # none (nothing sent), log (written to this server's log, for local testing) or resend.
+    provider: ${EMAIL_PROVIDER:none}
+    # Resend API key (starts with re_). Server-side only.
+    api-key: ${EMAIL_API_KEY:}
+    # Must be an address on a domain you verified in Resend, e.g. "ProjectFlow <no-reply@yourdomain.com>".
+    # onboarding@resend.dev only delivers to your own Resend account's address (for testing).
+    from: ${EMAIL_FROM:ProjectFlow <onboarding@resend.dev>}
+    reply-to: ${EMAIL_REPLY_TO:}
+    api-url: ${EMAIL_API_URL:https://api.resend.com/emails}
+    # Email people each time their account is signed in to.
+    sign-in-alerts: ${EMAIL_SIGN_IN_ALERTS:true}
+  accounts:
+    # auto: new accounts must confirm their email when emails are really delivered (EMAIL_PROVIDER=resend).
+    require-email-verification: ${REQUIRE_EMAIL_VERIFICATION:auto}
+    registration-open: ${REGISTRATION_OPEN:true}
+  bot-protection:
+    # Per-address limits on sign-up, sign-in and emailed links. Only tests turn this off.
+    rate-limits: ${RATE_LIMITS:true}
+    # Cloudflare Turnstile secret key (optional). Set VITE_TURNSTILE_SITE_KEY on the frontend too.
+    turnstile-secret: ${TURNSTILE_SECRET_KEY:}
+    turnstile-verify-url: https://challenges.cloudflare.com/turnstile/v0/siteverify
+    # Proxies in front of this server that add to X-Forwarded-For (1 on Railway/Render; 0 without a proxy).
+    trusted-proxies: ${TRUSTED_PROXIES:1}
+  https:
+    # Redirect plain HTTP to HTTPS (the host's proxy must send X-Forwarded-Proto). HSTS is always
+    # sent on HTTPS responses.
+    required: ${REQUIRE_HTTPS:false}
+  ai:
+    # Optional. "none" disables AI features (the UI says so honestly). "anthropic" uses the Messages API.
+    provider: ${AI_PROVIDER:none}
+    api-key: ${AI_API_KEY:}
+    model: ${AI_MODEL:}
+    base-url: ${AI_BASE_URL:https://api.anthropic.com}
+    max-requests-per-hour: ${AI_MAX_REQUESTS_PER_HOUR:30}

@@ -1,0 +1,48 @@
+# Third-party notices
+
+ProjectFlow is original work. The one piece of code adapted from another project is listed below with its licence. npm dependencies are covered by their own licences (see `frontend/package.json`) and aren't repeated here.
+
+## dnd-kit — MIT License
+
+- **What:** the collision-detection strategy for multiple sortable containers, used in `frontend/src/features/tasks/KanbanBoard.tsx` (`collisionDetection`). It prefers the droppable under the pointer, falls back to rectangle intersection, resolves a column to its closest card, and caches the last target. It was adapted from the "MultipleContainers" story in `stories/2 - Presets/Sortable/MultipleContainers.tsx`.
+- **Source:** https://github.com/clauderic/dnd-kit, tag `@dnd-kit/sortable@10.0.0` (commit `2d86292`).
+- **Changes:**
+  - Rewritten for ProjectFlow's `col:<STATUS>` column ids.
+  - Removed the "trash" and container-sorting branches.
+  - Combined with ProjectFlow's workflow drop rules.
+
+```
+MIT License
+
+Copyright (c) 2021, Claudéric Demers
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+## No code copied from
+
+- **Plane** (AGPL-3.0-only). Only product and interaction ideas were used, re-implemented from scratch; no Plane source files, components or styles are included. Copying Plane code would require releasing ProjectFlow under the AGPL.
+- **jira_clone** (MIT). Only ideas were used.
+- **Spring Petclinic REST** (Apache-2.0). So far only architecture conventions have been used. If backend code is adapted from it later, its Apache-2.0 licence and NOTICE requirements will be recorded here.
+
+## Apache Maven Wrapper — Apache License 2.0
+
+- **What:** `backend/mvnw` and `backend/mvnw.cmd`, unmodified. `backend/.mvn/wrapper/maven-wrapper.properties` was written for ProjectFlow.
+- **Source:** Apache Maven Wrapper 3.3.4 (https://maven.apache.org/wrapper/), copied from https://github.com/spring-petclinic/spring-petclinic-rest.
+- **Licence:** Apache License, Version 2.0 — https://www.apache.org/licenses/LICENSE-2.0. The scripts carry their own licence header.

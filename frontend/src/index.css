@@ -1,0 +1,367 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/inter-tight';
+@import '@fontsource/instrument-serif/400.css';
+@import '@fontsource/instrument-serif/400-italic.css';
+
+/* Class-based dark mode: <html class="dark"> */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * ProjectFlow design tokens — "Gallery".
+ *
+ * Direction taken from a fine-art catalogue: pale stone canvas, white exhibition
+ * panels, square corners, hairline rules, light-weight display type, tiny
+ * wide-tracked uppercase labels, and one warm bronze accent used sparingly.
+ * Colour beyond that is reserved for meaning (status, priority, health).
+ *
+ * Components only use the semantic utilities (bg-surface, text-muted,
+ * border-line, ...), never raw palette colours for chrome.
+ */
+:root {
+  --canvas: #ecebe8;
+  --surface: #ffffff;
+  --surface-2: #f6f5f2;
+  --surface-3: #e7e5e0;
+  --line: #e3e1dc;
+  --line-strong: #cbc8c1;
+  --ink: #1c1b19;
+  --ink-2: #3d3b37;
+  --muted: #625f59;
+  --subtle: #696660; /* ≥ 4.5:1 on canvas and every surface (WCAG AA) */
+
+  /* Primary actions are ink; "soft" is a warm stone tint. */
+  --brand: #1c1b19;
+  --brand-hover: #3a3834;
+  --brand-soft: #efede8;
+  --brand-ink: #1c1b19;
+  /* Bronze accent: links, focus, the active nav rule. AA on white (5.9:1) and on the canvas (4.9:1). */
+  --accent: #7d5f3d;
+  /* Lighter bronze for large display words only (≥3:1 for large text on white and canvas). */
+  --accent-display: #967b58;
+
+  --success: #2f7a55;
+  --success-soft: #e8f1eb;
+  --warning: #8c5b0c;
+  --warning-soft: #f6efe1;
+  --danger: #b5412e;
+  --danger-soft: #f7e8e4;
+  --info: #3a5f8f;
+  --info-soft: #e8eef5;
+
+  --ring: rgb(125 95 61 / 0.55);
+  --shadow-color: 35 10% 25%;
+
+  /* Data-viz colours (validated for colour-blind separation on each surface) */
+  --status-todo: #e87ba4;
+  --status-progress: #2a78d6;
+  --status-review: #eda100;
+  --status-done: #1baf7a;
+  --series-1: #2a78d6;
+  --series-2: #1baf7a;
+  /* 3D model materials: stone plate → graphite → amber → bronze (approved). */
+  --model-todo: #d9d4ca;
+  --model-progress: #4a4843;
+  --model-review: #c98a2e;
+  --model-done: #8a6a46;
+  --model-ground: #f8f7f4;
+  color-scheme: light;
+}
+
+.dark {
+  --canvas: #111110;
+  --surface: #191917;
+  --surface-2: #20201e;
+  --surface-3: #2b2a27;
+  --line: #2c2b28;
+  --line-strong: #403e3a;
+  --ink: #efece6;
+  --ink-2: #d2cfc7;
+  --muted: #9c988f;
+  --subtle: #948f87;
+
+  --brand: #efece6;
+  --brand-hover: #ffffff;
+  --brand-soft: #262522;
+  --brand-ink: #efece6;
+  --accent: #c9ab82;
+  --accent-display: #c9ab82;
+
+  --success: #6cc59a;
+  --success-soft: #13241b;
+  --warning: #e3b25c;
+  --warning-soft: #2a2112;
+  --danger: #ef8a76;
+  --danger-soft: #2d1713;
+  --info: #8fb1dc;
+  --info-soft: #172130;
+
+  --ring: rgb(201 171 130 / 0.55);
+  --shadow-color: 0 0% 0%;
+
+  --status-todo: #d55181;
+  --status-progress: #3987e5;
+  --status-review: #c98500;
+  --status-done: #199e70;
+  --series-1: #3987e5;
+  --series-2: #199e70;
+  --model-todo: #3f3d39;
+  --model-progress: #d8d3c9;
+  --model-review: #e39a3b;
+  --model-done: #b8925f;
+  --model-ground: #1a1a18;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Inter Tight Variable', 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Instrument Serif', 'Times New Roman', Times, serif;
+
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-ink: var(--brand-ink);
+  --color-accent: var(--accent);
+  --color-accent-display: var(--accent-display);
+
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+
+  /* Square, gallery-wall corners. Avatars and dots keep rounded-full. */
+  --radius-sm: 0px;
+  --radius-md: 1px;
+  --radius-lg: 2px;
+  --radius-xl: 2px;
+
+  /* Hairlines do the work; shadows are only for floating layers. */
+  --shadow-card: 0 0 0 0 transparent;
+  --shadow-pop: 0 18px 40px -12px hsl(var(--shadow-color) / 0.28), 0 2px 6px -2px hsl(var(--shadow-color) / 0.12);
+
+  --animate-fade-in: fade-in 160ms ease-out;
+  --animate-pop-in: pop-in 160ms cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-slide-in-left: slide-in-left 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes pop-in {
+  /* Only scale/opacity: centring uses the separate `translate` property. */
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes slide-in-left {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@layer base {
+  /* A grid without explicit columns gets one column that can shrink, so a wide child (a canvas,
+     a table in a scroll box) can't push the page wider than the phone. grid-cols-* still wins. */
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-canvas text-ink font-sans text-sm;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+  h1 {
+    font-weight: 300;
+  }
+  a {
+    text-underline-offset: 3px;
+  }
+  *,
+  ::before,
+  ::after {
+    border-color: var(--line);
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']) {
+    cursor: pointer;
+  }
+  /* Browser autofill paints inputs pale blue (dark blue-grey in dark mode). Keep them on-palette. */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  select:-webkit-autofill {
+    -webkit-text-fill-color: var(--ink);
+    -webkit-box-shadow: 0 0 0 1000px var(--surface) inset;
+    box-shadow: 0 0 0 1000px var(--surface) inset;
+    caret-color: var(--ink);
+    transition: background-color 9999s ease-out 0s;
+  }
+  ::selection {
+    background: color-mix(in srgb, var(--brand) 25%, transparent);
+  }
+}
+
+/* Replay scrubber on the 3D model: a hairline track and a square handle. */
+.model-scrubber {
+  appearance: none;
+  -webkit-appearance: none;
+  height: 24px;
+  background: transparent;
+  cursor: pointer;
+}
+.model-scrubber::-webkit-slider-runnable-track {
+  height: 1px;
+  background: transparent;
+}
+.model-scrubber::-moz-range-track {
+  height: 1px;
+  background: transparent;
+}
+.model-scrubber::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 20px;
+  margin-top: -10px;
+  background: var(--ink);
+  border: 2px solid var(--surface);
+}
+.model-scrubber::-moz-range-thumb {
+  width: 10px;
+  height: 18px;
+  border-radius: 0;
+  background: var(--ink);
+  border: 2px solid var(--surface);
+}
+.model-scrubber:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+@layer utilities {
+  /* Serif accent for single words in headlines, e.g. "Good morning, <em class='accent-serif'>Aarav</em>". */
+  /* Kept under its old name: now a thin bronze display word, as in a catalogue title. */
+  .accent-serif {
+    font-family: var(--font-display);
+    font-style: normal;
+    font-weight: 200;
+    letter-spacing: -0.02em;
+    color: var(--accent-display);
+  }
+  /* Small uppercase label used above headings ("eyebrow"). */
+  .eyebrow {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  /* Small wide-tracked uppercase text for navigation and buttons. */
+  .caps {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  /* Thin oversized numerals ("20 Years"). */
+  .numeral {
+    font-family: var(--font-display);
+    font-weight: 200;
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+  /* Faint modular grid, used as a background texture. */
+  .grid-paper {
+    background-image:
+      linear-gradient(to right, var(--grid-line, rgb(255 255 255 / 0.07)) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-line, rgb(255 255 255 / 0.07)) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-strong) transparent;
+  }
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Recharts: inherit theme colours */
+.recharts-cartesian-axis-tick-value {
+  fill: var(--muted);
+  font-size: 12px;
+}
+.recharts-cartesian-grid line {
+  stroke: var(--line);
+}
+.recharts-default-tooltip {
+  background: var(--surface) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 0;
+}
+.recharts-legend-item-text {
+  color: var(--ink-2) !important;
+}
